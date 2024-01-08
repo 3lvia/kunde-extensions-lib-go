@@ -1,7 +1,6 @@
 package consumerLogger
 
 import (
-	"elvia.io/jordfeil-consumer/runtime"
 	"github.com/uptrace/opentelemetry-go-extra/otelzap"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -9,10 +8,15 @@ import (
 	"time"
 )
 
+const (
+	Local       = "local"
+	Development = "dev"
+)
+
 func ConfigureLogger(env string) (*otelzap.Logger, func()) {
 	var cfg zap.Config
 	switch env {
-	case runtime.Local, runtime.Development:
+	case Local, Development:
 		cfg = zap.NewDevelopmentConfig()
 	default:
 		cfg = zap.NewProductionConfig()

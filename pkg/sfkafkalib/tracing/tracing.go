@@ -2,12 +2,12 @@ package tracing
 
 import (
 	"context"
-	"elvia.io/jordfeil-consumer/runtime"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
 	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/sdk/resource"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
+	"sfkafkalib/consumerLogger"
 )
 
 func ConfigureTracing(ctx context.Context, r *resource.Resource, env string) (func(), error) {
@@ -18,7 +18,7 @@ func ConfigureTracing(ctx context.Context, r *resource.Resource, env string) (fu
 
 	var prc sdktrace.TracerProviderOption
 	switch env {
-	case runtime.Local:
+	case consumerLogger.Local:
 		prc = sdktrace.WithSyncer(exporter)
 	default:
 		prc = sdktrace.WithBatcher(exporter)

@@ -2,10 +2,10 @@ package salesforce
 
 import (
 	"context"
-	"elvia.io/jordfeil-consumer/kafka"
 	"errors"
 	"fmt"
 	"github.com/3lvia/libraries-go/pkg/hashivault"
+	"sfkafkalib/kafka"
 )
 
 func CreateSfConnConf(ctx context.Context, config kafka.ConsumerConfig, secretsManager hashivault.SecretsManager) (*ConnectionConfig, error) {

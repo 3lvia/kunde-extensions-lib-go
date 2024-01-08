@@ -2,7 +2,6 @@ package kafka
 
 import (
 	"context"
-	"elvia.io/jordfeil-consumer/salesforce"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -16,6 +15,7 @@ import (
 	semconv "go.opentelemetry.io/otel/semconv/v1.17.0"
 	"go.opentelemetry.io/otel/trace"
 	"go.uber.org/zap"
+	"sfkafkalib/salesforce"
 )
 
 var (

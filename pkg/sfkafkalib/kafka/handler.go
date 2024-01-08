@@ -3,9 +3,9 @@ package kafka
 import (
 	"context"
 
-	"elvia.io/jordfeil-consumer/salesforce"
 	"github.com/uptrace/opentelemetry-go-extra/otelzap"
 	"go.opentelemetry.io/otel/trace"
+	"sfkafkalib/salesforce"
 )
 
 type HandlerFunc func(context.Context, salesforce.KafkaMessage__c) error
