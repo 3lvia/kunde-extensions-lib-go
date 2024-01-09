@@ -3,12 +3,13 @@ package kafka
 import (
 	"context"
 	"fmt"
+	"github.com/3lvia/kunde-extensions-lib-go/pkg/sfkafkalib/configuration"
 	"github.com/3lvia/libraries-go/pkg/hashivault"
 	"github.com/3lvia/libraries-go/pkg/mschema"
 	"net/http"
 )
 
-func CreateSchemaDescriptor(ctx context.Context, conf ConsumerConfig, secretsManager hashivault.SecretsManager) (mschema.Descriptor, error) {
+func CreateSchemaDescriptor(ctx context.Context, conf configuration.ConsumerConfig, secretsManager hashivault.SecretsManager) (mschema.Descriptor, error) {
 	secret, err := secretsManager.GetSecret(ctx, fmt.Sprintf(conf.SchemaCredsPath, conf.System))
 	if err != nil {
 		return nil, err
