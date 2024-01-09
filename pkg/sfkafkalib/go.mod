@@ -1,4 +1,4 @@
-module sfkafkalib
+module github.com/3lvia/kunde-extensions-lib-go/pkg/sfkafkalib
 
 go 1.21.5
 
