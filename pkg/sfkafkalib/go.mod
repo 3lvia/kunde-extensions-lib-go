@@ -4,7 +4,7 @@ go 1.21.5
 
 require (
 	github.com/3lvia/libraries-go/pkg/hashivault v0.1.3
-	github.com/3lvia/libraries-go/pkg/kafkaclient v0.0.3
+	github.com/3lvia/libraries-go/pkg/kafkaclient v0.0.4
 	github.com/3lvia/libraries-go/pkg/mschema v0.0.2
 	github.com/uptrace/opentelemetry-go-extra/otelzap v0.2.3
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.46.1

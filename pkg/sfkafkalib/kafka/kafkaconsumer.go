@@ -172,8 +172,6 @@ func (c *Consumer) receive(ctx context.Context, msg *kafkaclient.StreamingMessag
 }
 
 func (c *Consumer) unmarshal(msg *kafkaclient.StreamingMessage) (*salesforce.KafkaMessage__c, error) {
-	fmt.Println("UNMARSHAL INITIAL STRING VALUE:")
-	fmt.Println(msg.Value)
 	switch c.desc.Type() {
 	case mschema.AVRO:
 		if v, isMap := msg.Value.(map[string]interface{}); isMap {
@@ -181,7 +179,6 @@ func (c *Consumer) unmarshal(msg *kafkaclient.StreamingMessage) (*salesforce.Kaf
 			if err != nil {
 				return nil, err
 			}
-			fmt.Println("STRING VALUE:\n" + string(b))
 			return &salesforce.KafkaMessage__c{
 				Key__c:   string(msg.Key),
 				Topic__c: c.conf.Topic,
