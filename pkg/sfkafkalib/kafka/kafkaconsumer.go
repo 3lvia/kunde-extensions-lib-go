@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/3lvia/kunde-extensions-lib-go/pkg/sfkafkalib/configuration"
 	"github.com/3lvia/kunde-extensions-lib-go/pkg/sfkafkalib/salesforce"
 	"github.com/3lvia/libraries-go/pkg/hashivault"
 	"github.com/3lvia/libraries-go/pkg/kafkaclient"
@@ -23,28 +24,18 @@ var (
 	ErrDeserializationFailed = errors.New("could not deserialize value")
 )
 
-type ConsumerConfig struct {
-	System                   string
-	Topic                    string
-	Application              string
-	SchemaInfoPath           string
-	SchemaCredsPath          string
-	VaultPath                string
-	TraceInstrumentationName string
-}
-
 type Consumer struct {
 	logger  *otelzap.Logger
 	tracer  trace.Tracer
 	ctx     context.Context
-	conf    ConsumerConfig
+	conf    configuration.ConsumerConfig
 	cancel  context.CancelFunc
 	outChan chan salesforce.KafkaMessage__c
 	errChan chan error
 	desc    mschema.Descriptor
 }
 
-func CreateKafkaConsumer(ctx context.Context, conf *ConsumerConfig, log *otelzap.Logger, secretsManager hashivault.SecretsManager, sfAuthClient *salesforce.AuthClient) (context.CancelFunc, error) {
+func CreateKafkaConsumer(ctx context.Context, conf *configuration.ConsumerConfig, log *otelzap.Logger, secretsManager hashivault.SecretsManager, sfAuthClient *salesforce.AuthClient) (context.CancelFunc, error) {
 	d, err := CreateSchemaDescriptor(ctx, *conf, secretsManager)
 	if err != nil {
 		fmt.Println("Could not create schema descriptor, error: " + err.Error())
@@ -92,7 +83,7 @@ func CreateKafkaConsumer(ctx context.Context, conf *ConsumerConfig, log *otelzap
 	}, err
 }
 
-func newConsumer(ctx context.Context, conf ConsumerConfig, l *otelzap.Logger, tracer trace.Tracer, v hashivault.SecretsManager, d mschema.Descriptor) (*Consumer, <-chan salesforce.KafkaMessage__c, <-chan error, error) {
+func newConsumer(ctx context.Context, conf configuration.ConsumerConfig, l *otelzap.Logger, tracer trace.Tracer, v hashivault.SecretsManager, d mschema.Descriptor) (*Consumer, <-chan salesforce.KafkaMessage__c, <-chan error, error) {
 
 	opts := []kafkaclient.Option{
 		kafkaclient.WithSecretsManager(v),
