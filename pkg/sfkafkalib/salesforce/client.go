@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	sObjectEndpoint = "/sobjects/KafkaMessage__c/" // TODO: Update endpoint for upsert
+	sObjectEndpoint = "/sobjects/KafkaMessage__c/"
 )
 
 type ApiError struct {

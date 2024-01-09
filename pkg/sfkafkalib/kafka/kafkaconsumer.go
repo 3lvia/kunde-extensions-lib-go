@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/3lvia/kunde-extensions-lib-go/pkg/sfkafkalib/salesforce"
 	"github.com/3lvia/libraries-go/pkg/hashivault"
 	"github.com/3lvia/libraries-go/pkg/kafkaclient"
 	"github.com/3lvia/libraries-go/pkg/mschema"
@@ -15,7 +16,6 @@ import (
 	semconv "go.opentelemetry.io/otel/semconv/v1.17.0"
 	"go.opentelemetry.io/otel/trace"
 	"go.uber.org/zap"
-	"sfkafkalib/salesforce"
 )
 
 var (

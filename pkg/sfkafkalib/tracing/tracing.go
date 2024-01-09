@@ -2,12 +2,12 @@ package tracing
 
 import (
 	"context"
+	"github.com/3lvia/kunde-extensions-lib-go/pkg/sfkafkalib/consumerLogger"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/stdout/stdouttrace"
 	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/sdk/resource"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
-	"sfkafkalib/consumerLogger"
 )
 
 func ConfigureTracing(ctx context.Context, r *resource.Resource, env string) (func(), error) {
