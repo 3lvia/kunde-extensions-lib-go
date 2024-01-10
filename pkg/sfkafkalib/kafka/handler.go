@@ -13,7 +13,7 @@ type HandlerFunc func(context.Context, salesforce.KafkaMessage__c) error
 func HandleFunc(tracer trace.Tracer, logger *otelzap.Logger, sfAuthClient *salesforce.AuthClient) HandlerFunc {
 	return func(ctx context.Context, message salesforce.KafkaMessage__c) error {
 
-		err := sfAuthClient.UpsertKafkaMessage(ctx, message) // TODO READD THIS
+		err := sfAuthClient.UpsertKafkaMessage(message)
 		if err != nil {
 			logger.Sugar().ErrorwContext(ctx, "upsert to salesforce failed", "key", message.Key__c)
 		} else {
