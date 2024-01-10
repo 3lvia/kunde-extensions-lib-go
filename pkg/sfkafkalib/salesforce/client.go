@@ -93,7 +93,7 @@ func CreateAuthClient(ctx context.Context, conf ConnectionConfig) (authClient *A
 
 	instanceUrl, ok := token.Extra("instance_url").(string)
 	if !ok {
-		return nil, errors.New("Faild to retrieve instance URL when creating auth client")
+		return nil, errors.New("Failed to retrieve instance URL when creating auth client")
 	}
 
 	baseUrl, err := url.Parse(instanceUrl)
@@ -101,7 +101,7 @@ func CreateAuthClient(ctx context.Context, conf ConnectionConfig) (authClient *A
 		return nil, err
 	}
 
-	apiUrl, err := baseUrl.Parse(conf.ApiEndpoint)
+	apiUrl, err := baseUrl.Parse(conf.ApiEndpoint + sObjectEndpoint)
 	if err != nil {
 		return nil, err
 	}
@@ -111,19 +111,14 @@ func CreateAuthClient(ctx context.Context, conf ConnectionConfig) (authClient *A
 	return authClient, nil
 }
 
-func (client *AuthClient) UpsertKafkaMessage(ctx context.Context, km KafkaMessage__c) error {
-	url, err := client.ApiUrl.Parse(sObjectEndpoint)
-	if err != nil {
-		return err
-	}
-
+func (client *AuthClient) UpsertKafkaMessage(km KafkaMessage__c) error {
 	json, err := json.Marshal(km)
 	if err != nil {
 		return err
 	}
 	fmt.Println("Message content: " + string(km.Value__c))
 
-	req, err := http.NewRequest(http.MethodPost, url.String(), bytes.NewBuffer(json))
+	req, err := http.NewRequest(http.MethodPost, client.ApiUrl.String(), bytes.NewBuffer(json))
 	if err != nil {
 		return err
 	}
