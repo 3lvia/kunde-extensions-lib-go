@@ -7,7 +7,7 @@ require (
 	github.com/3lvia/libraries-go/pkg/kafkaclient v0.0.4
 	github.com/3lvia/libraries-go/pkg/mschema v0.0.2
 	github.com/uptrace/opentelemetry-go-extra/otelzap v0.2.3
-	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.46.1
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.47.0
 	go.opentelemetry.io/otel v1.22.0
 	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.22.0
 	go.opentelemetry.io/otel/sdk v1.22.0
