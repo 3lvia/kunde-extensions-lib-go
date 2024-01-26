@@ -33,18 +33,6 @@ func CreateSfConnConf(ctx context.Context, config configuration.ConsumerConfig, 
 	if sfConnConf.ClientSecret == "" {
 		return nil, errors.New("Missing required connection config ClientSecret")
 	}
-	sfConnConf.Username = fmt.Sprint(secretMap["salesforce-username"])
-	if sfConnConf.Username == "" {
-		return nil, errors.New("Missing required connection config Username")
-	}
-	sfConnConf.Password = fmt.Sprint(secretMap["salesforce-password"])
-	if sfConnConf.Password == "" {
-		return nil, errors.New("Missing required connection config Password")
-	}
-	sfConnConf.Token = fmt.Sprint(secretMap["salesforce-security-token"])
-	if sfConnConf.Token == "" {
-		return nil, errors.New("Missing required connection config Token")
-	}
 
 	return sfConnConf, nil
 }

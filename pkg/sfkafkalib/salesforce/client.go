@@ -53,9 +53,6 @@ type Authentication struct {
 type ConnectionConfig struct {
 	LoginURL     string // EG: "https://test.salesforce.com/services/oauth2/token"
 	ApiEndpoint  string // EG: "/services/data/v56.0/"; In vault only version is saved, we need to add the rest of the endpoint
-	Username     string // Integration user username
-	Password     string // Integration user pw
-	Token        string // Integration user security token
 	ClientId     string // Connected app ClientID
 	ClientSecret string // Connected app ClientSecret
 }
@@ -70,9 +67,6 @@ type AuthClient struct {
 func CreateAuthClient(ctx context.Context, conf ConnectionConfig) (authClient *AuthClient, err error) {
 
 	authParams := url.Values{}
-	authParams.Set("grant_type", "password")
-	authParams.Set("username", conf.Username)
-	authParams.Set("password", fmt.Sprintf("%v%v", conf.Password, conf.Token))
 	oauth2Conf := &clientcredentials.Config{
 		ClientID:       conf.ClientId,
 		ClientSecret:   conf.ClientSecret,
