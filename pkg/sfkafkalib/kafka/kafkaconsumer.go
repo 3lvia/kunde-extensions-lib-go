@@ -26,6 +26,7 @@ var (
 
 type Consumer struct {
 	logger  *otelzap.Logger
+	filter  *kafkaFilter
 	tracer  trace.Tracer
 	ctx     context.Context
 	conf    configuration.ConsumerConfig
@@ -152,23 +153,27 @@ func (c *Consumer) receive(ctx context.Context, msg *kafkaclient.StreamingMessag
 	ctx, span := c.tracer.Start(ctx, "kafka.receive", trace.WithAttributes(semconv.PeerService("KAFKA")))
 	defer span.End()
 
-	key := string(msg.Key)
-	span.SetAttributes(attribute.String("key", key))
-	c.logger.Sugar().InfowContext(ctx, "received a message", "key", key)
+	if c.filter != nil && !c.filter.keep(msg) {
+		span.SetStatus(codes.Ok, "message filtered")
+	} else {
+		key := string(msg.Key)
+		span.SetAttributes(attribute.String("key", key))
+		c.logger.Sugar().InfowContext(ctx, "received a message", "key", key)
 
-	dto, err := c.unmarshal(msg)
-	if err != nil {
-		span.RecordError(err)
-		span.SetStatus(codes.Error, err.Error())
-		c.logger.Sugar().ErrorwContext(ctx, "unable to consume message", "key", key, zap.Error(err))
-		errChan <- err
-		return
+		dto, err := c.unmarshal(msg)
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, err.Error())
+			c.logger.Sugar().ErrorwContext(ctx, "unable to consume message", "key", key, zap.Error(err))
+			errChan <- err
+			return
+		}
+
+		outChan <- *dto
+
+		span.SetStatus(codes.Ok, "message consumed") // TODO: Potential error where we send OK but sending to SF fails -> Lost message?
+		c.logger.Sugar().InfowContext(ctx, "message consumed", "key", key)
 	}
-
-	outChan <- *dto
-
-	span.SetStatus(codes.Ok, "message consumed") // TODO: Potential error where we send OK but sending to SF fails -> Lost message?
-	c.logger.Sugar().InfowContext(ctx, "message consumed", "key", key)
 }
 
 func (c *Consumer) unmarshal(msg *kafkaclient.StreamingMessage) (*salesforce.KafkaMessage__c, error) {
