@@ -2,8 +2,8 @@ package kafka
 
 import "github.com/3lvia/libraries-go/pkg/kafkaclient"
 
-type kafkaFilter struct {
+type Filter struct {
 	keep filterFn
 }
 
-type filterFn func(message *kafkaclient.StreamingMessage) bool
+type filterFn func(m *kafkaclient.StreamingMessage) bool
