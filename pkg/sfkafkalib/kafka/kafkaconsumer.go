@@ -36,7 +36,7 @@ type Consumer struct {
 	desc    mschema.Descriptor
 }
 
-func CreateKafkaConsumer(ctx context.Context, conf *configuration.ConsumerConfig, log *otelzap.Logger, secretsManager hashivault.SecretsManager, sfAuthClient *salesforce.AuthClient) (context.CancelFunc, error) {
+func CreateKafkaConsumer(ctx context.Context, conf *configuration.ConsumerConfig, log *otelzap.Logger, filter *Filter, secretsManager hashivault.SecretsManager, sfAuthClient *salesforce.AuthClient) (context.CancelFunc, error) {
 	d, err := CreateSchemaDescriptor(ctx, *conf, secretsManager)
 	if err != nil {
 		fmt.Println("Could not create schema descriptor, error: " + err.Error())
@@ -46,7 +46,7 @@ func CreateKafkaConsumer(ctx context.Context, conf *configuration.ConsumerConfig
 	fmt.Println("CREATE KAFKA CONSUMER")
 	tracer := otel.Tracer(conf.TraceInstrumentationName)
 
-	consumer, outChan, errChan, err := newConsumer(ctx, *conf, log, tracer, secretsManager, d)
+	consumer, outChan, errChan, err := newConsumer(ctx, *conf, log, filter, tracer, secretsManager, d)
 
 	if err != nil {
 		fmt.Println("Could not create new Conumer, error: " + err.Error())
@@ -86,7 +86,7 @@ func CreateKafkaConsumer(ctx context.Context, conf *configuration.ConsumerConfig
 	}, err
 }
 
-func newConsumer(ctx context.Context, conf configuration.ConsumerConfig, l *otelzap.Logger, tracer trace.Tracer, v hashivault.SecretsManager, d mschema.Descriptor) (*Consumer, <-chan salesforce.KafkaMessage__c, <-chan error, error) {
+func newConsumer(ctx context.Context, conf configuration.ConsumerConfig, l *otelzap.Logger, f *Filter, tracer trace.Tracer, v hashivault.SecretsManager, d mschema.Descriptor) (*Consumer, <-chan salesforce.KafkaMessage__c, <-chan error, error) {
 
 	opts := []kafkaclient.Option{
 		kafkaclient.WithSecretsManager(v),
@@ -107,6 +107,7 @@ func newConsumer(ctx context.Context, conf configuration.ConsumerConfig, l *otel
 
 	c := &Consumer{
 		logger:  l,
+		filter:  f,
 		tracer:  tracer,
 		ctx:     ctx,
 		conf:    conf,
