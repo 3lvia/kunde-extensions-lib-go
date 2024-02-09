@@ -26,7 +26,7 @@ var (
 
 type Consumer struct {
 	logger  *otelzap.Logger
-	filter  *kafkaFilter
+	filter  *Filter
 	tracer  trace.Tracer
 	ctx     context.Context
 	conf    configuration.ConsumerConfig
