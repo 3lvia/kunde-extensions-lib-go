@@ -7,3 +7,7 @@ type Filter struct {
 }
 
 type filterFn func(m *kafkaclient.StreamingMessage) bool
+
+func CreateFilter(fn filterFn) Filter {
+	return Filter{keep: fn}
+}
