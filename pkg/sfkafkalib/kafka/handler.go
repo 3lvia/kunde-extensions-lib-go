@@ -16,6 +16,7 @@ func HandleFunc(tracer trace.Tracer, logger *otelzap.Logger, sfAuthClient *sales
 		err := sfAuthClient.UpsertKafkaMessage(message)
 		if err != nil {
 			logger.Sugar().ErrorwContext(ctx, "upsert to salesforce failed", "key", message.Key__c)
+			panic(message)
 		} else {
 			logger.Sugar().InfowContext(ctx, "upserted message", "key", message.Key__c)
 		}
