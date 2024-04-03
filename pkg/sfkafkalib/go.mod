@@ -1,6 +1,6 @@
 module github.com/3lvia/kunde-extensions-lib-go/pkg/sfkafkalib
 
-go 1.21.6
+go 1.22.2
 
 require (
 	github.com/3lvia/libraries-go/pkg/hashivault v0.1.3
