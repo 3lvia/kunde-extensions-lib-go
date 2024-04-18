@@ -58,8 +58,9 @@ type ConnectionConfig struct {
 }
 
 type AuthClient struct {
-	HttpClient http.Client
-	ApiUrl     url.URL
+	ApiUrl url.URL
+	Config *clientcredentials.Config
+	Ctx    context.Context
 	//tracer  trace.Tracer		 //TODO Reimplement
 	//service attribute.KeyValue //TODO Reimplement
 }
@@ -67,7 +68,7 @@ type AuthClient struct {
 func CreateAuthClient(ctx context.Context, conf ConnectionConfig) (authClient *AuthClient, err error) {
 
 	authParams := url.Values{}
-	oauth2Conf := &clientcredentials.Config{
+	credsConf := &clientcredentials.Config{
 		ClientID:       conf.ClientId,
 		ClientSecret:   conf.ClientSecret,
 		TokenURL:       conf.LoginURL,
@@ -77,10 +78,8 @@ func CreateAuthClient(ctx context.Context, conf ConnectionConfig) (authClient *A
 
 	httpClient := http.Client{Transport: otelhttp.NewTransport(http.DefaultTransport)}
 	ctx = context.WithValue(ctx, oauth2.HTTPClient, httpClient)
-	authClient = new(AuthClient)
-	authClient.HttpClient = *oauth2Conf.Client(ctx)
 
-	token, err := oauth2Conf.TokenSource(ctx).Token()
+	token, err := credsConf.TokenSource(ctx).Token()
 	if err != nil {
 		return nil, err
 	}
@@ -100,7 +99,10 @@ func CreateAuthClient(ctx context.Context, conf ConnectionConfig) (authClient *A
 		return nil, err
 	}
 
+	authClient = new(AuthClient)
+	authClient.Config = credsConf
 	authClient.ApiUrl = *apiUrl
+	authClient.Ctx = ctx
 
 	return authClient, nil
 }
@@ -118,15 +120,14 @@ func (client *AuthClient) UpsertKafkaMessage(km KafkaMessage__c) error {
 	}
 
 	req.Header.Add("Content-Type", "application/json")
-	res, err := client.HttpClient.Do(req)
+	res, err := client.Config.Client(client.Ctx).Do(req)
 	if err != nil {
 		return err
 	}
 
-	statusOK := res.StatusCode >= 200 && res.StatusCode < 300
 	fmt.Printf("Response status code from SF: '%d'", res.StatusCode)
 
-	if !statusOK {
+	if !(res.StatusCode >= 200 && res.StatusCode < 300) {
 		return ApiError{
 			err:        ErrResponseNotOK,
 			message:    "Unable to post kafka message to Salesforce",
