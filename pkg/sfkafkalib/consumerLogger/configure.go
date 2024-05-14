@@ -1,6 +1,11 @@
 package consumerLogger
 
 import (
+	"context"
+	"fmt"
+	"github.com/3lvia/kunde-extensions-lib-go/pkg/sfkafkalib/configuration"
+	"github.com/3lvia/libraries-go/pkg/hashivault"
+	"github.com/microsoft/ApplicationInsights-Go/appinsights"
 	"github.com/uptrace/opentelemetry-go-extra/otelzap"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -31,4 +36,15 @@ func ConfigureLogger(env string) (*otelzap.Logger, func()) {
 	ol := otelzap.New(logger)
 	cleanup := otelzap.ReplaceGlobals(ol)
 	return ol, cleanup
+}
+
+func NewTelemetryClient(ctx context.Context, conf *configuration.ConsumerConfig, secretsManager hashivault.SecretsManager) (appinsights.TelemetryClient, error) {
+	secretFunc, err := secretsManager.GetSecret(ctx, conf.VaultIkeyPath)
+	if err != nil {
+		return nil, err
+	}
+
+	secretMap := secretFunc()
+
+	return appinsights.NewTelemetryClient(fmt.Sprint(secretMap["instrumentation-key"])), nil
 }

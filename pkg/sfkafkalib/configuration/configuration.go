@@ -6,6 +6,7 @@ type ConsumerConfig struct {
 	Application              string
 	SchemaInfoPath           string
 	SchemaCredsPath          string
+	VaultIkeyPath            string
 	VaultPath                string
 	TraceInstrumentationName string
 }
