@@ -10,6 +10,8 @@ import (
 	"github.com/3lvia/libraries-go/pkg/hashivault"
 	"github.com/3lvia/libraries-go/pkg/kafkaclient"
 	"github.com/3lvia/libraries-go/pkg/mschema"
+	"github.com/microsoft/ApplicationInsights-Go/appinsights"
+	"github.com/microsoft/ApplicationInsights-Go/appinsights/contracts"
 	"github.com/uptrace/opentelemetry-go-extra/otelzap"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
@@ -25,18 +27,19 @@ var (
 )
 
 type Consumer struct {
-	logger  *otelzap.Logger
-	filter  *Filter
-	tracer  trace.Tracer
-	ctx     context.Context
-	conf    configuration.ConsumerConfig
-	cancel  context.CancelFunc
-	outChan chan salesforce.KafkaMessage__c
-	errChan chan error
-	desc    mschema.Descriptor
+	logger    *otelzap.Logger
+	telemetry *appinsights.TelemetryClient
+	filter    *Filter
+	tracer    trace.Tracer
+	ctx       context.Context
+	conf      configuration.ConsumerConfig
+	cancel    context.CancelFunc
+	outChan   chan salesforce.KafkaMessage__c
+	errChan   chan error
+	desc      mschema.Descriptor
 }
 
-func CreateKafkaConsumer(ctx context.Context, conf *configuration.ConsumerConfig, log *otelzap.Logger, filter *Filter, secretsManager hashivault.SecretsManager, sfAuthClient *salesforce.AuthClient) (context.CancelFunc, error) {
+func CreateKafkaConsumer(ctx context.Context, conf *configuration.ConsumerConfig, log *otelzap.Logger, t *appinsights.TelemetryClient, filter *Filter, secretsManager hashivault.SecretsManager, sfAuthClient *salesforce.AuthClient) (context.CancelFunc, error) {
 	d, err := CreateSchemaDescriptor(ctx, *conf, secretsManager)
 	if err != nil {
 		fmt.Println("Could not create schema descriptor, error: " + err.Error())
@@ -46,7 +49,7 @@ func CreateKafkaConsumer(ctx context.Context, conf *configuration.ConsumerConfig
 	fmt.Println("CREATE KAFKA CONSUMER")
 	tracer := otel.Tracer(conf.TraceInstrumentationName)
 
-	consumer, outChan, errChan, err := newConsumer(ctx, *conf, log, filter, tracer, secretsManager, d)
+	consumer, outChan, errChan, err := newConsumer(ctx, *conf, log, t, filter, tracer, secretsManager, d)
 
 	if err != nil {
 		fmt.Println("Could not create new Conumer, error: " + err.Error())
@@ -68,12 +71,15 @@ func CreateKafkaConsumer(ctx context.Context, conf *configuration.ConsumerConfig
 				return
 			case message := <-oc:
 				fmt.Println("CONSUMING MESSAGE: " + message.Key__c)
+				(*t).TrackTrace("Consuming KafkaMessage: "+message.Key__c, contracts.Verbose)
 				if err := handleFunc(ctx, message); err != nil {
 					log.Sugar().ErrorwContext(ctx, "error in kafka handler", zap.Error(err))
+					(*t).TrackException(err)
 					panic(message)
 				}
 			case err := <-errChan:
 				fmt.Println("ERROR")
+				(*t).TrackException(err)
 				log.Sugar().ErrorwContext(ctx, "error in kafka handler", zap.Error(err))
 				panic(err)
 			}
@@ -86,7 +92,7 @@ func CreateKafkaConsumer(ctx context.Context, conf *configuration.ConsumerConfig
 	}, err
 }
 
-func newConsumer(ctx context.Context, conf configuration.ConsumerConfig, l *otelzap.Logger, f *Filter, tracer trace.Tracer, v hashivault.SecretsManager, d mschema.Descriptor) (*Consumer, <-chan salesforce.KafkaMessage__c, <-chan error, error) {
+func newConsumer(ctx context.Context, conf configuration.ConsumerConfig, l *otelzap.Logger, t *appinsights.TelemetryClient, f *Filter, tracer trace.Tracer, v hashivault.SecretsManager, d mschema.Descriptor) (*Consumer, <-chan salesforce.KafkaMessage__c, <-chan error, error) {
 
 	opts := []kafkaclient.Option{
 		kafkaclient.WithSecretsManager(v),
@@ -106,15 +112,16 @@ func newConsumer(ctx context.Context, conf configuration.ConsumerConfig, l *otel
 	ctx, cancel := context.WithCancel(ctx)
 
 	c := &Consumer{
-		logger:  l,
-		filter:  f,
-		tracer:  tracer,
-		ctx:     ctx,
-		conf:    conf,
-		cancel:  cancel,
-		outChan: outChan,
-		errChan: errChan,
-		desc:    d,
+		logger:    l,
+		filter:    f,
+		tracer:    tracer,
+		telemetry: t,
+		ctx:       ctx,
+		conf:      conf,
+		cancel:    cancel,
+		outChan:   outChan,
+		errChan:   errChan,
+		desc:      d,
 	}
 
 	go c.consume(stream)
@@ -143,6 +150,7 @@ func (c *Consumer) consume(s <-chan *kafkaclient.StreamingMessage) {
 		case msg := <-s:
 			fmt.Println("CASE MSG")
 			if msg.Error != nil {
+				(*c.telemetry).TrackException(msg.Error)
 				c.logger.ErrorContext(ctx, "kafka consumer error", zap.Error(msg.Error))
 			} else {
 				fmt.Println("RECEIVE")
@@ -161,12 +169,14 @@ func (c *Consumer) receive(ctx context.Context, msg *kafkaclient.StreamingMessag
 	} else {
 		key := string(msg.Key)
 		span.SetAttributes(attribute.String("key", key))
+		(*c.telemetry).TrackTrace("received a message with key "+key, contracts.Verbose)
 		c.logger.Sugar().InfowContext(ctx, "received a message", "key", key)
 
 		dto, err := c.unmarshal(msg)
 		if err != nil {
 			span.RecordError(err)
 			span.SetStatus(codes.Error, err.Error())
+			(*c.telemetry).TrackException(err)
 			c.logger.Sugar().ErrorwContext(ctx, "unable to consume message", "key", key, zap.Error(err))
 			errChan <- err
 			return

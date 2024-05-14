@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 
@@ -128,9 +129,13 @@ func (client *AuthClient) UpsertKafkaMessage(km KafkaMessage__c) error {
 	fmt.Printf("Response status code from SF: '%d'", res.StatusCode)
 
 	if !(res.StatusCode >= 200 && res.StatusCode < 300) {
+		msg, err := io.ReadAll(res.Body)
+		if err != nil {
+			msg = []byte("")
+		}
 		return ApiError{
 			err:        ErrResponseNotOK,
-			message:    "Unable to post kafka message to Salesforce",
+			message:    "Unable to post kafka message to Salesforce with message: " + string(msg),
 			statusCode: res.StatusCode,
 			status:     res.Status,
 		}
