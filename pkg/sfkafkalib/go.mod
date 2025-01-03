@@ -9,13 +9,13 @@ require (
 	github.com/3lvia/libraries-go/pkg/kafkaclient v0.0.4
 	github.com/3lvia/libraries-go/pkg/mschema v0.0.2
 	github.com/microsoft/ApplicationInsights-Go v0.4.4
-	github.com/uptrace/opentelemetry-go-extra/otelzap v0.2.3
+	github.com/uptrace/opentelemetry-go-extra/otelzap v0.3.2
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.58.0
 	go.opentelemetry.io/otel v1.33.0
 	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.22.0
 	go.opentelemetry.io/otel/sdk v1.22.0
 	go.opentelemetry.io/otel/trace v1.33.0
-	go.uber.org/zap v1.26.0
+	go.uber.org/zap v1.27.0
 	golang.org/x/oauth2 v0.16.0
 )
 
@@ -50,8 +50,9 @@ require (
 	github.com/ryanuber/go-glob v1.0.0 // indirect
 	github.com/twmb/franz-go v1.14.4 // indirect
 	github.com/twmb/franz-go/pkg/kmsg v1.6.1 // indirect
-	github.com/uptrace/opentelemetry-go-extra/otelutil v0.2.3 // indirect
+	github.com/uptrace/opentelemetry-go-extra/otelutil v0.3.2 // indirect
 	go.opentelemetry.io/auto/sdk v1.1.0 // indirect
+	go.opentelemetry.io/otel/log v0.6.0 // indirect
 	go.opentelemetry.io/otel/metric v1.33.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/crypto v0.18.0 // indirect
