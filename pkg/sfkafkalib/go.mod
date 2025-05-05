@@ -1,6 +1,6 @@
 module github.com/3lvia/kunde-extensions-lib-go/pkg/sfkafkalib
 
-go 1.23
+go 1.23.0
 
 toolchain go1.23.4
 
@@ -16,7 +16,7 @@ require (
 	go.opentelemetry.io/otel/sdk v1.33.0
 	go.opentelemetry.io/otel/trace v1.33.0
 	go.uber.org/zap v1.27.0
-	golang.org/x/oauth2 v0.24.0
+	golang.org/x/oauth2 v0.30.0
 )
 
 require (
