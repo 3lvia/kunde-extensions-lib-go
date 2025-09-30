@@ -6,7 +6,7 @@ toolchain go1.23.4
 
 require (
 	github.com/3lvia/libraries-go/pkg/hashivault v0.2.6
-	github.com/3lvia/libraries-go/pkg/kafkaclient v0.0.11
+	github.com/3lvia/libraries-go/pkg/kafkaclient v0.0.9
 	github.com/3lvia/libraries-go/pkg/mschema v0.0.4
 	github.com/microsoft/ApplicationInsights-Go v0.4.4
 	github.com/uptrace/opentelemetry-go-extra/otelzap v0.3.2
@@ -42,22 +42,22 @@ require (
 	github.com/hashicorp/go-uuid v1.0.3 // indirect
 	github.com/hashicorp/hcl v1.0.1-vault-7 // indirect
 	github.com/hashicorp/vault/api v1.20.0 // indirect
-	github.com/klauspost/compress v1.17.11 // indirect
-	github.com/linkedin/goavro/v2 v2.14.0 // indirect
+	github.com/klauspost/compress v1.17.8 // indirect
+	github.com/linkedin/goavro/v2 v2.13.0 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
-	github.com/pierrec/lz4/v4 v4.1.22 // indirect
+	github.com/pierrec/lz4/v4 v4.1.21 // indirect
 	github.com/ryanuber/go-glob v1.0.0 // indirect
-	github.com/twmb/franz-go v1.18.1 // indirect
+	github.com/twmb/franz-go v1.18.0 // indirect
 	github.com/twmb/franz-go/pkg/kmsg v1.9.0 // indirect
 	github.com/uptrace/opentelemetry-go-extra/otelutil v0.3.2 // indirect
 	go.opentelemetry.io/auto/sdk v1.1.0 // indirect
 	go.opentelemetry.io/otel/log v0.6.0 // indirect
 	go.opentelemetry.io/otel/metric v1.35.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	golang.org/x/crypto v0.37.0 // indirect
-	golang.org/x/net v0.39.0 // indirect
-	golang.org/x/sys v0.32.0 // indirect
-	golang.org/x/text v0.24.0 // indirect
+	golang.org/x/crypto v0.36.0 // indirect
+	golang.org/x/net v0.38.0 // indirect
+	golang.org/x/sys v0.31.0 // indirect
+	golang.org/x/text v0.23.0 // indirect
 	golang.org/x/time v0.8.0 // indirect
 )
