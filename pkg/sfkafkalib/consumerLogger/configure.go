@@ -38,13 +38,13 @@ func ConfigureLogger(env string) (*otelzap.Logger, func()) {
 	return ol, cleanup
 }
 
-//func NewTelemetryClient(ctx context.Context, conf *configuration.ConsumerConfig, secretsManager hashivault.SecretsManager) (appinsights.TelemetryClient, error) {
-//	secretFunc, err := secretsManager.GetSecret(ctx, conf.VaultIkeyPath)
-//	if err != nil {
-//		return nil, err
-//	}
+func NewTelemetryClient(ctx context.Context, conf *configuration.ConsumerConfig, secretsManager hashivault.SecretsManager) (appinsights.TelemetryClient, error) {
+	secretFunc, err := secretsManager.GetSecret(ctx, conf.VaultIkeyPath)
+	if err != nil {
+		return nil, err
+	}
 
-//	secretMap := secretFunc()
+	secretMap := secretFunc()
 
-//	return appinsights.NewTelemetryClient(fmt.Sprint(secretMap["instrumentation-key"])), nil
-//}
+	return appinsights.NewTelemetryClient(fmt.Sprint(secretMap["instrumentation-key"])), nil
+}
