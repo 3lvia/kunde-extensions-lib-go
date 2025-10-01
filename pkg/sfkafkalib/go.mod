@@ -6,7 +6,7 @@ toolchain go1.23.4
 
 require (
 	github.com/3lvia/libraries-go/pkg/hashivault v0.2.3
-	github.com/3lvia/libraries-go/pkg/kafkaclient v0.0.9
+	github.com/3lvia/libraries-go/pkg/kafkaclient v0.0.12
 	github.com/3lvia/libraries-go/pkg/mschema v0.0.4
 	github.com/microsoft/ApplicationInsights-Go v0.4.4
 	github.com/uptrace/opentelemetry-go-extra/otelzap v0.3.2
