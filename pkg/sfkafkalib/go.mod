@@ -1,6 +1,6 @@
 module github.com/3lvia/kunde-extensions-lib-go/pkg/sfkafkalib
 
-go 1.24.0
+go 1.24.9
 
 require (
 	github.com/3lvia/libraries-go/pkg/hashivault v0.2.7
@@ -8,24 +8,24 @@ require (
 	github.com/3lvia/libraries-go/pkg/mschema v0.0.6
 	github.com/microsoft/ApplicationInsights-Go v0.4.4
 	github.com/uptrace/opentelemetry-go-extra/otelzap v0.3.2
-	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.58.0
+	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.65.0
 	go.opentelemetry.io/otel v1.40.0
-	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.33.0
+	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.40.0
 	go.opentelemetry.io/otel/sdk v1.40.0
 	go.opentelemetry.io/otel/trace v1.40.0
-	go.uber.org/zap v1.27.0
-	golang.org/x/oauth2 v0.27.0
+	go.uber.org/zap v1.27.1
+	golang.org/x/oauth2 v0.34.0
 )
 
 require (
-	code.cloudfoundry.org/clock v0.0.0-20180518195852-02e53af36e6c // indirect
+	code.cloudfoundry.org/clock v1.60.0 // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/go-jose/go-jose/v4 v4.1.3 // indirect
 	github.com/go-logr/logr v1.4.3 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
-	github.com/gofrs/uuid v3.3.0+incompatible // indirect
+	github.com/gofrs/uuid v4.4.0+incompatible // indirect
 	github.com/golang/snappy v1.0.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/cap v0.12.0 // indirect
@@ -51,7 +51,7 @@ require (
 	github.com/twmb/franz-go/pkg/kmsg v1.12.0 // indirect
 	github.com/uptrace/opentelemetry-go-extra/otelutil v0.3.2 // indirect
 	go.opentelemetry.io/auto/sdk v1.2.1 // indirect
-	go.opentelemetry.io/otel/log v0.6.0 // indirect
+	go.opentelemetry.io/otel/log v0.16.0 // indirect
 	go.opentelemetry.io/otel/metric v1.40.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/net v0.49.0 // indirect
