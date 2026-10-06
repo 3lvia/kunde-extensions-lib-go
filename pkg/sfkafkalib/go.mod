@@ -1,19 +1,19 @@
 module github.com/3lvia/kunde-extensions-lib-go/pkg/sfkafkalib
 
-go 1.24.9
+go 1.26.0
 
 require (
 	github.com/3lvia/libraries-go/pkg/hashivault v0.2.7
 	github.com/3lvia/libraries-go/pkg/kafkaclient v0.1.0
 	github.com/3lvia/libraries-go/pkg/mschema v0.0.6
 	github.com/microsoft/ApplicationInsights-Go v0.4.4
-	github.com/uptrace/opentelemetry-go-extra/otelzap v0.3.2
+	github.com/uptrace/opentelemetry-go-extra/otelzap v0.4.0
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.65.0
-	go.opentelemetry.io/otel v1.40.0
+	go.opentelemetry.io/otel v1.47.0
 	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.40.0
 	go.opentelemetry.io/otel/sdk v1.40.0
-	go.opentelemetry.io/otel/trace v1.40.0
-	go.uber.org/zap v1.27.1
+	go.opentelemetry.io/otel/trace v1.47.0
+	go.uber.org/zap v1.28.0
 	golang.org/x/oauth2 v0.34.0
 )
 
@@ -23,7 +23,7 @@ require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/go-jose/go-jose/v4 v4.1.3 // indirect
-	github.com/go-logr/logr v1.4.3 // indirect
+	github.com/go-logr/logr v1.4.4 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/gofrs/uuid v4.4.0+incompatible // indirect
 	github.com/golang/snappy v1.0.0 // indirect
@@ -49,10 +49,10 @@ require (
 	github.com/ryanuber/go-glob v1.0.0 // indirect
 	github.com/twmb/franz-go v1.20.6 // indirect
 	github.com/twmb/franz-go/pkg/kmsg v1.12.0 // indirect
-	github.com/uptrace/opentelemetry-go-extra/otelutil v0.3.2 // indirect
+	github.com/uptrace/opentelemetry-go-extra/otelutil v0.4.0 // indirect
 	go.opentelemetry.io/auto/sdk v1.2.1 // indirect
-	go.opentelemetry.io/otel/log v0.16.0 // indirect
-	go.opentelemetry.io/otel/metric v1.40.0 // indirect
+	go.opentelemetry.io/otel/log v1.47.0 // indirect
+	go.opentelemetry.io/otel/metric v1.47.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	golang.org/x/net v0.49.0 // indirect
 	golang.org/x/sys v0.40.0 // indirect
